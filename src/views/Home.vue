@@ -15,7 +15,9 @@
       </WorldMapVue>
     </div>
     <div class="filters"></div>
-    <div class="search"></div>
+    <div class="search">
+      <input type="text" placeholder="Search" v-model="searchKey" />
+    </div>
     <table class="country-table">
       <thead>
         <th>Country</th>
@@ -29,7 +31,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="key in Object.keys(sheetRows)" :key="key">
+        <tr v-for="key in filteredRowKeys" :key="key">
           <td>{{ key }}</td>
           <td>{{ sheetRows[key].continent }}</td>
           <td>{{ sheetRows[key].region }}</td>
@@ -67,7 +69,8 @@ export default {
       countries: {
         US: "#2200AA"
       },
-      rawSheetRows: []
+      rawSheetRows: [],
+      searchKey: ""
     };
   },
 
@@ -90,6 +93,18 @@ export default {
       }
 
       return ret;
+    },
+
+    filteredRowKeys() {
+      if (!this.searchKey) {
+        return Object.keys(this.sheetRows);
+      } else {
+        return Object.keys(this.sheetRows).filter(el =>
+          JSON.stringify(this.sheetRows[el])
+            .toLowerCase()
+            .includes(this.searchKey.toLowerCase())
+        );
+      }
     }
   },
 
