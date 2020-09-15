@@ -14,6 +14,19 @@
         </template>
       </WorldMapVue>
     </div>
+    <div class="filters"></div>
+    <div class="search"></div>
+    <ul class="country-table">
+      <li v-for="key in Object.keys(sheetRows)" :key="key">
+        <span>{{ sheetRows[key].continent }}</span>
+        <span>{{ sheetRows[key].region }}</span>
+        <span>{{ sheetRows[key].visa_req }}</span>
+        <span>{{ sheetRows[key].allowed_stay }}</span>
+        <span>{{ sheetRows[key].notes }}</span>
+        <span>{{ sheetRows[key].wikipedia }}</span>
+        <span>{{ sheetRows[key].wikivoyage }}</span>
+      </li>
+    </ul>
     <modal name="countryinfo">
       <h2>Country {{ clickedCountry }} has been selected</h2>
     </modal>
@@ -39,13 +52,36 @@ export default {
       clickedCountry: "",
       countries: {
         US: "#2200AA"
-      }
+      },
+      rawSheetRows: []
     };
+  },
+
+  computed: {
+    sheetRows() {
+      let ret = {};
+      for (const row of this.rawSheetRows) {
+        const country = row.Country;
+        const rowData = {
+          region: row.Region,
+          continent: row.Continent,
+          visa_req: row["Visa requirement"],
+          allowed_stay: row["Allowed stay"],
+          notes: row.Notes,
+          wikipedia: row.Wikipedia,
+          wikivoyage: row.WikiVoyage
+        };
+
+        ret[country] = rowData;
+      }
+
+      return ret;
+    }
   },
 
   async mounted() {
     WP.init();
-    console.log(await WP.getSheetRows());
+    this.rawSheetRows = await WP.getSheetRows();
   },
 
   methods: {
