@@ -14,7 +14,28 @@
         </template>
       </WorldMapVue>
     </div>
-    <div class="filters"></div>
+    <div class="filters">
+      <div class="continent-filters">
+        <span
+          v-for="continent in continents"
+          :key="continent"
+          :class="{ active: continentFilter === continent }"
+          @click="continentFilter = continent"
+        >
+          {{ continent }}
+        </span>
+      </div>
+      <div class="region-filters">
+        <span
+          v-for="region in regions"
+          :key="region"
+          :class="{ active: regionFilter === region }"
+          @click="regionFilter = region"
+        >
+          {{ region }}
+        </span>
+      </div>
+    </div>
     <div class="search">
       <input type="text" placeholder="Search" v-model="searchKey" />
     </div>
@@ -29,9 +50,8 @@
         <th>Wikipedia</th>
         <th>WikiVoyage</th>
       </thead>
-
       <tbody>
-        <tr v-for="key in filteredRowKeys" :key="key">
+        <tr v-for="key in searchFilteredRowKeys" :key="key">
           <td>{{ key }}</td>
           <td>{{ sheetRows[key].continent }}</td>
           <td>{{ sheetRows[key].region }}</td>
@@ -70,7 +90,9 @@ export default {
         US: "#2200AA"
       },
       rawSheetRows: [],
-      searchKey: ""
+      searchKey: "",
+      continentFilter: "",
+      regionFilter: ""
     };
   },
 
@@ -96,15 +118,67 @@ export default {
     },
 
     filteredRowKeys() {
-      if (!this.searchKey) {
-        return Object.keys(this.sheetRows);
-      } else {
-        return Object.keys(this.sheetRows).filter(el =>
-          JSON.stringify(this.sheetRows[el])
-            .toLowerCase()
-            .includes(this.searchKey.toLowerCase())
+      let res = Object.keys(this.sheetRows);
+      if (this.continentFilter) {
+        res = res.filter(
+          el =>
+            this.sheetRows[el].continent.toLowerCase() ===
+            this.continentFilter.toLowerCase()
         );
       }
+
+      if (this.regionFilter) {
+        res = res.filter(
+          el =>
+            this.sheetRows[el].region.toLowerCase() ===
+            this.regionFilter.toLowerCase()
+        );
+      }
+
+      return res;
+    },
+
+    searchFilteredRowKeys() {
+      if (!this.searchKey) {
+        return this.filteredRowKeys;
+      } else {
+        return this.filteredRowKeys.filter(
+          el =>
+            JSON.stringify(this.sheetRows[el])
+              .toLowerCase()
+              .includes(this.searchKey.toLowerCase()) ||
+            el.toLowerCase().includes(this.searchKey.toLowerCase())
+        );
+      }
+    },
+
+    regions() {
+      let res = [];
+      for (const key of Object.keys(this.sheetRows)) {
+        if (!res.includes(this.sheetRows[key].region)) {
+          if (
+            !this.continentFilter ||
+            this.sheetRows[key].region
+              .toLowerCase()
+              .includes(this.continentFilter.toLowerCase())
+          ) {
+            res.push(this.sheetRows[key].region);
+          }
+        }
+      }
+
+      return res;
+    },
+
+    continents() {
+      let res = [];
+      for (const key of Object.keys(this.sheetRows)) {
+        if (!res.includes(this.sheetRows[key].continent)) {
+          res.push(this.sheetRows[key].continent);
+        }
+      }
+
+      return res;
     }
   },
 
@@ -139,6 +213,24 @@ export default {
 
   .map-container {
     height: 70%;
+  }
+
+  .filters {
+    .continent-filters {
+      span {
+        &.active {
+          color: lightblue;
+        }
+      }
+    }
+
+    .region-filters {
+      span {
+        &.active {
+          color: lightblue;
+        }
+      }
+    }
   }
 }
 </style>
