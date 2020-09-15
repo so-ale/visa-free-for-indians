@@ -2,12 +2,12 @@
   <div class="home">
     <div class="map-container">
       <WorldMapVue
-        :countryColors="colors"
+        :countryColors="true"
         :countryData="countries"
         :show-overlay="showMapOverlay"
-        @mouseenter="onMouseEnterMapCountry"
-        @mouseleave="onMouseLeaveMapCountry"
-        @click="onClickMapCountry"
+        @mouseenter="hoverStart"
+        @mouseleave="hoverEnd"
+        @click="selectCountry"
       >
         <template v-slot:overlay>
           <a href="www.wikipedia.org/country"> Take me there </a>
@@ -33,21 +33,18 @@ export default {
 
   data() {
     return {
-      savedColor: "",
-      colors: true,
+      hoverSavedColor: "",
       showMapOverlay: false,
-      activeCountry: "",
+      clickedCountry: "",
       countries: {
-        US: "#2200AA",
-        CA: "red",
-        UK: "rgba(200, 200, 255, 0.1)"
+        US: "#2200AA"
       }
     };
   },
 
   methods: {
     hoverStart(code) {
-      this.savedColor = this.countries[code];
+      this.hoverSavedColor = this.countries[code];
       // Vue.set(this.countries, code, "yellow");
 
       // Update your data/property to be displayed on the overlay.
@@ -57,9 +54,9 @@ export default {
     // Vue.set(this.countries, code, this.savedColor);
     //},
 
-    onClickMapCountry(code) {
+    selectCountry(code) {
       Vue.set(this.countries, code, "green");
-      this.activeCountry = code;
+      this.clickedCountry = code;
       this.$modal.show("countryinfo");
     }
   }
