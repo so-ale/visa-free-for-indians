@@ -16,17 +16,31 @@
     </div>
     <div class="filters"></div>
     <div class="search"></div>
-    <ul class="country-table">
-      <li v-for="key in Object.keys(sheetRows)" :key="key">
-        <span>{{ sheetRows[key].continent }}</span>
-        <span>{{ sheetRows[key].region }}</span>
-        <span>{{ sheetRows[key].visa_req }}</span>
-        <span>{{ sheetRows[key].allowed_stay }}</span>
-        <span>{{ sheetRows[key].notes }}</span>
-        <span>{{ sheetRows[key].wikipedia }}</span>
-        <span>{{ sheetRows[key].wikivoyage }}</span>
-      </li>
-    </ul>
+    <table class="country-table">
+      <thead>
+        <th>Country</th>
+        <th>Continent</th>
+        <th>Region</th>
+        <th>Visa requirement</th>
+        <th>Allowed stay</th>
+        <th>Notes</th>
+        <th>Wikipedia</th>
+        <th>WikiVoyage</th>
+      </thead>
+
+      <tbody>
+        <tr v-for="key in Object.keys(sheetRows)" :key="key">
+          <td>{{ key }}</td>
+          <td>{{ sheetRows[key].continent }}</td>
+          <td>{{ sheetRows[key].region }}</td>
+          <td>{{ sheetRows[key].visa_req }}</td>
+          <td>{{ sheetRows[key].allowed_stay }}</td>
+          <td>{{ sheetRows[key].notes }}</td>
+          <td>{{ sheetRows[key].wikipedia }}</td>
+          <td>{{ sheetRows[key].wikivoyage }}</td>
+        </tr>
+      </tbody>
+    </table>
     <modal name="countryinfo">
       <h2>Country {{ clickedCountry }} has been selected</h2>
     </modal>
