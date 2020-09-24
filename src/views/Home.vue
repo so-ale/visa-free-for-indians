@@ -216,6 +216,16 @@ export default {
     }
   },
 
+  watch: {
+    continentFilter() {
+      this.searchKey = "";
+    },
+
+    regionFilter() {
+      this.searchKey = "";
+    }
+  },
+
   async mounted() {
     WP.init();
     this.rawSheetRows = await WP.getSheetRows();
