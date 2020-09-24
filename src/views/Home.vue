@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <HeaderBar />
     <div class="map-container">
       <WorldMapVue
         :countryColors="true"
@@ -17,7 +18,7 @@
     <div class="filters">
       <div class="continent-filters">
         <label for="continentFilter">
-          CONTINENT:
+          Continent
         </label>
         <superselect
           v-model="continentFilter"
@@ -27,7 +28,7 @@
       </div>
       <div class="region-filters">
         <label for="regionFilter">
-          REGION:
+          Region
         </label>
         <superselect
           v-model="regionFilter"
@@ -77,6 +78,7 @@
         </tr>
       </tbody>
     </table>
+    <FooterBar />
     <modal name="countryinfo">
       <h2>Country {{ clickedCountry }} has been selected</h2>
     </modal>
@@ -88,10 +90,14 @@
 import WorldMapVue from "world-map-vue";
 import Vue from "vue";
 import { GS } from "@/services/gsheets";
+import HeaderBar from "@/components/HeaderBar";
+import FooterBar from "@/components/FooterBar";
 
 export default {
   name: "Home",
   components: {
+    HeaderBar,
+    FooterBar,
     WorldMapVue
   },
 
@@ -299,7 +305,6 @@ export default {
 <style lang="scss" scoped>
 .home {
   background: #00a99d;
-  padding-bottom: 10vh;
 
   .map-container {
     height: 90vh;
@@ -308,22 +313,30 @@ export default {
   }
 
   .filters {
+    width: 85%;
+    margin: 0 auto;
+    padding: 20px 10px;
+
     .continent-filters {
-      span {
-        cursor: pointer;
-        &.active {
-          color: lightblue;
-        }
+      padding: 10px 0;
+      display: inline-block;
+      width: 50%;
+
+      label {
+        color: white;
+        font-weight: bold;
+      }
+
+      &::v-deep .v-select {
+        width: 40%;
+        margin-left: 10px;
+        display: inline-block;
+        background: white;
       }
     }
 
     .region-filters {
-      span {
-        cursor: pointer;
-        &.active {
-          color: lightblue;
-        }
-      }
+      @extend .continent-filters;
     }
   }
 
@@ -344,6 +357,7 @@ export default {
     width: 85%;
     margin: 0 auto;
     margin-top: 4vh;
+    margin-bottom: 10vh;
     color: white;
 
     th {
