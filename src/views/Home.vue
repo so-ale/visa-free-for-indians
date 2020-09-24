@@ -113,6 +113,14 @@ export default {
         "Visa On Arrival": "arrival",
         "Visa Required": "required",
         "Freedom Of Movement": "freedom"
+      },
+
+      visaBgColors: {
+        "Visa Not Required": "#22b14c",
+        "eVisa/ETA": "#80ccdd",
+        "Visa On Arrival": "#aacc19",
+        "Visa Required": "#999999",
+        "Freedom Of Movement": "#ff8c00"
       }
     };
   },
@@ -319,9 +327,16 @@ export default {
   }
 
   .country-table {
-    width: 80%;
+    width: 85%;
     margin: 0 auto;
     color: white;
+
+    th {
+      background: #333333;
+      color: white;
+      font-weight: bold;
+      padding: 15px 24px;
+    }
 
     tr {
       &.notreq {
