@@ -39,7 +39,7 @@
     <div class="search">
       <input type="text" placeholder="Search" v-model="searchKey" />
     </div>
-    <table class="country-table">
+    <table v-if="searchFilteredRowKeys" class="country-table" CELLSPACING="0">
       <thead>
         <th>Country</th>
         <th>Continent</th>
@@ -51,15 +51,29 @@
         <th>WikiVoyage</th>
       </thead>
       <tbody>
-        <tr v-for="key in searchFilteredRowKeys" :key="key">
+        <tr
+          v-for="key in searchFilteredRowKeys"
+          :key="key"
+          :class="visaClasses[sheetRows[key].visa_req]"
+        >
           <td>{{ key }}</td>
           <td>{{ sheetRows[key].continent }}</td>
           <td>{{ sheetRows[key].region }}</td>
           <td>{{ sheetRows[key].visa_req }}</td>
           <td>{{ sheetRows[key].allowed_stay }}</td>
           <td>{{ sheetRows[key].notes }}</td>
-          <td>{{ sheetRows[key].wikipedia }}</td>
-          <td>{{ sheetRows[key].wikivoyage }}</td>
+          <td>
+            <a :href="sheetRows[key].wikipedia"
+              ><img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/46/Wikipedia-W-visual-balanced.svg"
+            /></a>
+          </td>
+          <td>
+            <a :href="sheetRows[key].wikivoyage"
+              ><img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/47/Notification-icon-Wikivoyage-logo.svg"
+            /></a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -92,7 +106,14 @@ export default {
       rawSheetRows: [],
       searchKey: "",
       continentFilter: "",
-      regionFilter: ""
+      regionFilter: "",
+      visaClasses: {
+        "Visa Not Required": "notreq",
+        "eVisa/ETA": "evisa",
+        "Visa On Arrival": "arrival",
+        "Visa Required": "required",
+        "Freedom Of Movement": "freedom"
+      }
     };
   },
 
@@ -253,23 +274,11 @@ export default {
         const countryRow = this.sheetRows[countryName];
 
         if (countryRow) {
-          switch (countryRow.visa_req) {
-            case "Visa Free":
-              Vue.set(this.countries, countryCode, "#22B14C");
-              break;
-
-            case "eVisa/ETA":
-              Vue.set(this.countries, countryCode, "#80CCDD");
-              break;
-
-            case "Visa On Arrival":
-              Vue.set(this.countries, countryCode, "#AACC19");
-              break;
-
-            case "Visa Required":
-              Vue.set(this.countries, countryCode, "#999999");
-              break;
-          }
+          Vue.set(
+            this.countries,
+            countryCode,
+            this.visaBgColors[countryRow.visa_req]
+          );
         } else {
           console.log("Missing country:", countryCode, countryName);
         }
@@ -305,6 +314,62 @@ export default {
         &.active {
           color: lightblue;
         }
+      }
+    }
+  }
+
+  .country-table {
+    width: 80%;
+    margin: 0 auto;
+    color: white;
+
+    tr {
+      &.notreq {
+        background: #22b14c;
+        color: #efefef;
+      }
+
+      &.evisa {
+        background: #80ccdd;
+        color: #666666;
+      }
+
+      &.arrival {
+        background: #aacc19;
+        color: #666666;
+      }
+
+      &.required {
+        background: #999999;
+        color: #efefef;
+      }
+
+      &.freedom {
+        background: #ff8c00;
+        color: #666666;
+      }
+    }
+
+    td:first-of-type,
+    td:last-of-type {
+      font-weight: bold;
+      padding: 10px 20px;
+    }
+
+    tr:nth-child(odd) {
+      td {
+        background: rgba(#000000, 0.05);
+      }
+    }
+
+    td {
+      padding: 10px 0;
+
+      a > img {
+        width: auto;
+        height: 22px;
+        background: white;
+        padding: 4px;
       }
     }
   }
