@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="search">
-      <input type="text" placeholder="Search" v-model="searchKey" />
+      <input type="text" placeholder="Search" v-model="searchKey" id="search" />
     </div>
     <table v-if="searchFilteredRowKeys" class="country-table" CELLSPACING="0">
       <thead>
@@ -299,6 +299,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   background: #00a99d;
+  padding-bottom: 10vh;
 
   .map-container {
     height: 90vh;
@@ -326,9 +327,23 @@ export default {
     }
   }
 
+  .search {
+    width: 85%;
+    margin: 0 auto;
+    height: 5vh;
+    margin-top: 2.5vh;
+
+    input {
+      margin-left: 10px;
+      padding: 8px 16px;
+      width: 15%;
+    }
+  }
+
   .country-table {
     width: 85%;
     margin: 0 auto;
+    margin-top: 4vh;
     color: white;
 
     th {
