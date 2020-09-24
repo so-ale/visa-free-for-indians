@@ -19,31 +19,21 @@
         <label for="continentFilter">
           CONTINENT:
         </label>
-        <select v-model="continentFilter" id="continentFilter">
-          <option
-            v-for="continent in continents"
-            :key="continent"
-            :class="{ active: continentFilter === continent }"
-            :value="continent"
-          >
-            {{ continent }}
-          </option>
-        </select>
+        <superselect
+          v-model="continentFilter"
+          id="continentFilter"
+          :options="continents"
+        />
       </div>
       <div class="region-filters">
         <label for="regionFilter">
           REGION:
         </label>
-        <select v-model="regionFilter" id="regionFilter">
-          <option
-            v-for="region in regions"
-            :key="region"
-            :class="{ active: regionFilter === region }"
-            @change="regionFilter = region"
-          >
-            {{ region }}
-          </option>
-        </select>
+        <superselect
+          v-model="regionFilter"
+          id="regionFilter"
+          :options="regions"
+        />
       </div>
     </div>
     <div class="search">
