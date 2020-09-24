@@ -284,7 +284,7 @@ export default {
   background: #00a99d;
 
   .map-container {
-    height: 70%;
+    height: 90vh;
     background: #0f7774;
     padding: 40px 0;
   }
@@ -316,5 +316,7 @@ export default {
   &:hover {
     fill: orange !important;
   }
+
+  stroke-width: 0.5;
 }
 </style>
