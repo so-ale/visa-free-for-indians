@@ -101,7 +101,7 @@ export default {
       },
       rawSheetRows: [],
       searchKey: "",
-      continentFilter: "Africa",
+      continentFilter: "",
       regionFilter: ""
     };
   },
@@ -219,6 +219,7 @@ export default {
   watch: {
     continentFilter() {
       this.searchKey = "";
+      this.regionFilter = "";
     },
 
     regionFilter() {
