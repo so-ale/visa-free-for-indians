@@ -73,7 +73,7 @@
 // @ is an alias to /src
 import WorldMapVue from "world-map-vue";
 import Vue from "vue";
-import { WP } from "@/services/gsheets";
+import { GS } from "@/services/gsheets";
 
 export default {
   name: "Home",
@@ -218,8 +218,8 @@ export default {
   },
 
   async mounted() {
-    WP.init();
-    this.rawSheetRows = await WP.getSheetRows();
+    GS.init();
+    this.rawSheetRows = await GS.getSheetRows();
   },
 
   methods: {

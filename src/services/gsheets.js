@@ -1,6 +1,6 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 
-export const WP = {
+export const GS = {
   doc: null,
 
   init() {
