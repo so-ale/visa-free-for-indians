@@ -153,15 +153,34 @@ export default {
     },
 
     regions() {
+      // Setup an empty array to which we will add the unique regions
       let res = [];
+
+      // Loop through the keys Array of the sheetRows object
       for (const key of Object.keys(this.sheetRows)) {
+        // Does the result array already include this region? If not, process it
         if (!res.includes(this.sheetRows[key].region)) {
-          if (
+          // Do we have multiple continents for this region? e.g. Eurasia <= Europe, Asia
+          if (this.continentFilter && this.sheetRows[key].multipleContinents) {
+            // Yes, extract the multiple continents from the semicolon separated string, as an array
+            const multipleContinents = this.sheetRows[
+              key
+            ].multipleContinents.split(";");
+
+            // Loop thru the extracted continent array
+            for (const cont of multipleContinents) {
+              // Check if the looped continent is what is set in our continent filter
+              if (this.continentFilter === cont) {
+                // Yes, push the region to our array since it is from a continent which is set as filter
+                res.push(this.sheetRows[key].region);
+              }
+            }
+          } else if (
             !this.continentFilter ||
-            this.sheetRows[key].region
-              .toLowerCase()
-              .includes(this.continentFilter.toLowerCase())
+            this.sheetRows[key].continent === this.continentFilter
           ) {
+            // This region belongs to just 1 continent, and either there is no filter,
+            // ...or the filter is set to that 1 continent
             res.push(this.sheetRows[key].region);
           }
         }
@@ -171,8 +190,13 @@ export default {
     },
 
     continents() {
+      // Setup an empty array to which we will add the unique continents
       let res = [];
+
+      // Go through the array of keys of the object [sheetrows]
       for (const key of Object.keys(this.sheetRows)) {
+        // For each key, get the sheetrows[key] continent
+        // If my result does not already have the continent, then add it
         if (!res.includes(this.sheetRows[key].continent)) {
           res.push(this.sheetRows[key].continent);
         }
@@ -190,12 +214,15 @@ export default {
   methods: {
     hoverStart(code) {
       this.hoverSavedColor = this.countries[code];
+      this.showMapOverlay = true;
       // Vue.set(this.countries, code, "yellow");
 
       // Update your data/property to be displayed on the overlay.
     },
 
-    hoverEnd() {},
+    hoverEnd() {
+      this.showMapOverlay = false;
+    },
 
     selectCountry(code) {
       Vue.set(this.countries, code, "green");

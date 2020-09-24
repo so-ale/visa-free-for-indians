@@ -6,7 +6,7 @@ export const WP = {
   init() {
     this.doc = new GoogleSpreadsheet(process.env.VUE_APP_SHEET_ID);
 
-    // OR use API key -- only for read-only access to public sheets
+    // Use API key -- only for read-only access to public sheets
     this.doc.useApiKey(process.env.VUE_APP_API_KEY);
   },
 
