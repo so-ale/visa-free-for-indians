@@ -87,7 +87,7 @@ export default {
       showMapOverlay: false,
       clickedCountry: "",
       countries: {
-        US: "#2200AA"
+        IN: "orange"
       },
       rawSheetRows: [],
       searchKey: "",
@@ -220,6 +220,8 @@ export default {
   async mounted() {
     GS.init();
     this.rawSheetRows = await GS.getSheetRows();
+
+    this.setCountryColors();
   },
 
   methods: {
@@ -240,6 +242,38 @@ export default {
       this.clickedCountry = code;
       this.$modal.show("countryinfo");
       console.log(document.getElementById(code).getAttribute("title"));
+    },
+
+    setCountryColors() {
+      const landElArray = document.querySelectorAll(".land");
+
+      for (const land of landElArray) {
+        const countryCode = land.getAttribute("id");
+        const countryName = land.getAttribute("title");
+        const countryRow = this.sheetRows[countryName];
+
+        if (countryRow) {
+          switch (countryRow.visa_req) {
+            case "Visa Free":
+              Vue.set(this.countries, countryCode, "#22B14C");
+              break;
+
+            case "eVisa/ETA":
+              Vue.set(this.countries, countryCode, "#80CCDD");
+              break;
+
+            case "Visa On Arrival":
+              Vue.set(this.countries, countryCode, "#AACC19");
+              break;
+
+            case "Visa Required":
+              Vue.set(this.countries, countryCode, "#999999");
+              break;
+          }
+        } else {
+          console.log("Missing country:", countryCode, countryName);
+        }
+      }
     }
   }
 };
@@ -247,10 +281,12 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  height: 100vh;
+  background: #00a99d;
 
   .map-container {
     height: 70%;
+    background: #0f7774;
+    padding: 40px 0;
   }
 
   .filters {
