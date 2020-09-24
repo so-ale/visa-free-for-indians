@@ -16,24 +16,34 @@
     </div>
     <div class="filters">
       <div class="continent-filters">
-        <span
-          v-for="continent in continents"
-          :key="continent"
-          :class="{ active: continentFilter === continent }"
-          @click="continentFilter = continent"
-        >
-          {{ continent }}
-        </span>
+        <label for="continentFilter">
+          CONTINENT:
+        </label>
+        <select v-model="continentFilter" id="continentFilter">
+          <option
+            v-for="continent in continents"
+            :key="continent"
+            :class="{ active: continentFilter === continent }"
+            :value="continent"
+          >
+            {{ continent }}
+          </option>
+        </select>
       </div>
       <div class="region-filters">
-        <span
-          v-for="region in regions"
-          :key="region"
-          :class="{ active: regionFilter === region }"
-          @click="regionFilter = region"
-        >
-          {{ region }}
-        </span>
+        <label for="regionFilter">
+          REGION:
+        </label>
+        <select v-model="regionFilter" id="regionFilter">
+          <option
+            v-for="region in regions"
+            :key="region"
+            :class="{ active: regionFilter === region }"
+            @change="regionFilter = region"
+          >
+            {{ region }}
+          </option>
+        </select>
       </div>
     </div>
     <div class="search">
@@ -91,7 +101,7 @@ export default {
       },
       rawSheetRows: [],
       searchKey: "",
-      continentFilter: "",
+      continentFilter: "Africa",
       regionFilter: ""
     };
   },
@@ -245,6 +255,7 @@ export default {
   .filters {
     .continent-filters {
       span {
+        cursor: pointer;
         &.active {
           color: lightblue;
         }
@@ -253,6 +264,7 @@ export default {
 
     .region-filters {
       span {
+        cursor: pointer;
         &.active {
           color: lightblue;
         }
